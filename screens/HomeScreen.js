@@ -39,6 +39,7 @@ const HomeScreen = ({navigation})=> {
           keyEXtractor={item=> item.paletteName}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={()=> navigation.navigate('ColorPalette', { paletteName: item.paletteName, colors:item.colors })} >
+              <Text style={styles.titles}> {item.paletteName}</Text>
             <FlatList
               horizontal={true}
               style={[{flex: 1, flexDirection: 'row'}, styles.colorPreview]}
@@ -66,7 +67,11 @@ const styles = StyleSheet.create({
   colorPreview: {
     flexDirection: 'column',
     backgroundColor: 'white',
-    flex:1
+    flex:1,
+    padding: 2,
   },
+  titles: {
+    fontWeight: 'bold'
+  }
 });
 export default HomeScreen;
