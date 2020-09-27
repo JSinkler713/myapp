@@ -25,45 +25,34 @@ const SOLARIZED = [
   { colorName: 'Base0', hexCode: '#839496' },
 ]
 
+const COLOR_PALETTES = [ 
+  { paletteName: 'Solarized', colors: SOLARIZED},
+  { paletteName: 'Frontend Masters', colors: FRONTEND_MASTERS},
+  { paletteName: 'Rainbow', colors: RAINBOW}
+]
 const HomeScreen = ({navigation})=> { 
   return ( 
     <>
       <View style={styles.colorPreview} >
-        <TouchableOpacity onPress={()=> navigation.navigate('ColorPalette', { paletteName:'Rainbow', colors:RAINBOW })} >
         <FlatList
-          horizontal={true}
-          style={[{flex: 1, flexDirection: 'row'}, styles.colorPreview]}
-          data={RAINBOW}
-          keyExtractor={item => item.hexCode}
+          data={COLOR_PALETTES}
+          keyEXtractor={item=> item.paletteName}
           renderItem={({ item }) => (
-            <ColorBoxPreview hexCode={item.hexCode} colorName={''}  />
+            <TouchableOpacity onPress={()=> navigation.navigate('ColorPalette', { paletteName: item.paletteName, colors:item.colors })} >
+            <FlatList
+              horizontal={true}
+              style={[{flex: 1, flexDirection: 'row'}, styles.colorPreview]}
+              data={item.colors}
+              keyExtractor={item => item.hexCode}
+              renderItem={({ item }) => (
+                <ColorBoxPreview hexCode={item.hexCode} colorName={''}  />
+              )}
+            />
+            </TouchableOpacity> 
+
           )}
         />
-        </TouchableOpacity> 
-        <TouchableOpacity onPress={()=> navigation.navigate('ColorPalette', { paletteName:'Frontend Masters', colors:FRONTEND_MASTERS })} >
-        <FlatList
-          horizontal={true}
-          style={[{flex: 1, flexDirection: 'row'}, styles.colorPreview]}
-          data={FRONTEND_MASTERS}
-          keyExtractor={item => item.hexCode}
-          renderItem={({ item }) => (
-            <ColorBoxPreview hexCode={item.hexCode} colorName={''}  />
-          )}
-        />
-        </TouchableOpacity> 
-        <TouchableOpacity onPress={()=> navigation.navigate('ColorPalette', { paletteName:'Solarized', colors:SOLARIZED })} >
-        <FlatList
-          horizontal={true}
-          style={[{flex: 1, flexDirection: 'row'}, styles.colorPreview]}
-          data={SOLARIZED}
-          keyExtractor={item => item.hexCode}
-          renderItem={({ item }) => (
-            <ColorBoxPreview hexCode={item.hexCode} colorName={''}  />
-          )}
-        />
-        </TouchableOpacity> 
       </View>
-      <Button onPress={()=> navigation.navigate('ColorPalette', { paletteName:'Tomato'})} title="To Tomato Page"/>
     </>
   ) 
 } 
@@ -76,6 +65,8 @@ const styles = StyleSheet.create({
   },
   colorPreview: {
     flexDirection: 'column',
+    backgroundColor: 'white',
+    flex:1
   },
 });
 export default HomeScreen;
