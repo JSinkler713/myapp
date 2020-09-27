@@ -31,6 +31,10 @@ const styles = StyleSheet.create({
     padding: 5,
     textAlign: 'center',
     color: 'white',
+    shadowColor: 'black',
+    shadowOffset: {width:0, height:2},
+    showOpacity: 0.4,
+    shadowRadius: 4,
   },
   cyan: {
     backgroundColor: '#2aa198',

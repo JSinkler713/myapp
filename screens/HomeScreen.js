@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useContext} from 'react'; 
+import React, {useState, useCallback, useEffect, useContext} from 'react'; 
 import { FlatList, Button, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import ColorBoxPreview from '../components/ColorBoxPreview';
  
+/*
 const RAINBOW = [
   { colorName: 'Red', hexCode: '#FF0000' },
   { colorName: 'Orange', hexCode: '#FF7F00' },
@@ -30,12 +31,30 @@ const COLOR_PALETTES = [
   { paletteName: 'Frontend Masters', colors: FRONTEND_MASTERS},
   { paletteName: 'Rainbow', colors: RAINBOW}
 ]
+*/
+
 const HomeScreen = ({navigation})=> { 
+  const [colorPalettes, setColorPalettes] = useState([])
+
+  const fetchColors = useCallback(async()=> {
+    try{
+    let colorData = await fetch('https://color-palette-api.kadikraman.now.sh/palettes')
+    colorData = await colorData.json()
+    setColorPalettes(colorData)
+    } catch (err) {
+      console.log(err)
+    }
+  })
+
+  useEffect(()=> {
+    fetchColors()
+  },[])
+
   return ( 
     <>
       <View style={styles.colorPreview} >
         <FlatList
-          data={COLOR_PALETTES}
+          data={colorPalettes}
           keyEXtractor={item=> item.paletteName}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={()=> navigation.navigate('ColorPalette', { paletteName: item.paletteName, colors:item.colors })} >
