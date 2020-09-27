@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import  HomeScreen  from './screens/HomeScreen.js'
 import  SecondPage  from './screens/SecondPage.js';
+import  ColorPalette  from './screens/ColorPalette.js';
 
 
 const Stack = createStackNavigator();
@@ -14,7 +15,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="SecondPage" component={SecondPage} />
+          <Stack.Screen name="ColorPalette" component={ColorPalette} options={({ route }) => ({ title: route.params.paletteName })} />
         </Stack.Navigator>
       </NavigationContainer>
   );
