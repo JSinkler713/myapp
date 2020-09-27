@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 5,
     color: 'white',
+    shadowColor: 'black',
+    shadowOffset: {width:0, height:2},
+    showOpacity: 0.4,
+    shadowRadius: 4,
   },
   cyan: {
     backgroundColor: '#2aa198',
