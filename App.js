@@ -6,17 +6,33 @@ import { createStackNavigator } from '@react-navigation/stack';
 import  HomeScreen  from './screens/HomeScreen.js'
 import  SecondPage  from './screens/SecondPage.js';
 import  ColorPalette  from './screens/ColorPalette.js';
+import AddNewPaletteModal from './screens/AddNewPaletteModal.js'
 
+const RootStack = createStackNavigator();
+const MainStack = createStackNavigator();
 
-const Stack = createStackNavigator();
+const MainStackScreen = ()=> {
+  return (
+    <MainStack.Navigator initialRouteName="Home">
+      <MainStack.Screen name="Home" component={HomeScreen} />
+      <MainStack.Screen name="ColorPalette" component={ColorPalette} options={({ route }) => ({ title: route.params.paletteName })} />
+    </MainStack.Navigator>
+  )
+}
 
 export default function App() {
   return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="ColorPalette" component={ColorPalette} options={({ route }) => ({ title: route.params.paletteName })} />
-        </Stack.Navigator>
+        <RootStack.Navigator mode='modal'>
+          <RootStack.Screen 
+            name='MainStackScreen' 
+            component={MainStackScreen} 
+            // this one makes sure it says Home and Color Palette
+            // instead of 'MainStackScreen'
+            options={{ headerShown: false }}
+          />
+          <RootStack.Screen name='AddNewPalette' component={ AddNewPaletteModal } />
+        </RootStack.Navigator>
       </NavigationContainer>
   );
 }
