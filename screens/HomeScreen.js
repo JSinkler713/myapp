@@ -1,40 +1,11 @@
 import React, {useState, useCallback, useEffect, useContext} from 'react'; 
-import { FlatList, Button, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { RefreshControl, FlatList, Button, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import ColorBoxPreview from '../components/ColorBoxPreview';
  
-/*
-const RAINBOW = [
-  { colorName: 'Red', hexCode: '#FF0000' },
-  { colorName: 'Orange', hexCode: '#FF7F00' },
-  { colorName: 'Yellow', hexCode: '#FFFF00' },
-  { colorName: 'Green', hexCode: '#00FF00' },
-  { colorName: 'Violet', hexCode: '#8B00FF' },
-];
-
-const FRONTEND_MASTERS = [
-  { colorName: 'Red', hexCode: '#c02d28' },
-  { colorName: 'Black', hexCode: '#3e3e3e' },
-  { colorName: 'Grey', hexCode: '#8a8a8a' },
-  { colorName: 'White', hexCode: '#ffffff' },
-  { colorName: 'Orange', hexCode: '#e66225' },
-];
-const SOLARIZED = [
-  { colorName: 'Base03', hexCode: '#002b36' },
-  { colorName: 'Base02', hexCode: '#073642' },
-  { colorName: 'Base01', hexCode: '#586e75' },
-  { colorName: 'Base00', hexCode: '#657b83' },
-  { colorName: 'Base0', hexCode: '#839496' },
-]
-
-const COLOR_PALETTES = [ 
-  { paletteName: 'Solarized', colors: SOLARIZED},
-  { paletteName: 'Frontend Masters', colors: FRONTEND_MASTERS},
-  { paletteName: 'Rainbow', colors: RAINBOW}
-]
-*/
 
 const HomeScreen = ({navigation})=> { 
   const [colorPalettes, setColorPalettes] = useState([])
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const fetchColors = useCallback(async()=> {
     try{
@@ -44,7 +15,14 @@ const HomeScreen = ({navigation})=> {
     } catch (err) {
       console.log(err)
     }
-  })
+  },[])
+
+  const handleRefresh = useCallback(async()=> {
+    setIsRefreshing(true);
+    await fetchColors()
+    setTimeout(()=>{setIsRefreshing(false)},1000)
+    
+  }, [])
 
   useEffect(()=> {
     fetchColors()
@@ -53,6 +31,7 @@ const HomeScreen = ({navigation})=> {
   return ( 
     <>
       <View style={styles.colorPreview} >
+        <Button style={{fontSize: 24}} onPress={()=> navigation.navigate('AddNewPalette')} title={'Add a color scheme'}></Button>
         <FlatList
           data={colorPalettes}
           keyEXtractor={item=> item.paletteName}
@@ -71,6 +50,8 @@ const HomeScreen = ({navigation})=> {
             </TouchableOpacity> 
 
           )}
+          onRefresh={handleRefresh} 
+          refreshing={isRefreshing}
         />
       </View>
     </>
