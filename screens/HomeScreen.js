@@ -3,7 +3,8 @@ import { RefreshControl, FlatList, Button, StyleSheet, Text, View, TouchableOpac
 import ColorBoxPreview from '../components/ColorBoxPreview';
  
 
-const HomeScreen = ({navigation})=> { 
+const HomeScreen = ({navigation, route })=> { 
+  let newColorPalette =  route.params ? route.params.newColorPalette : undefined 
   const [colorPalettes, setColorPalettes] = useState([])
   const [isRefreshing, setIsRefreshing] = useState(false)
 
@@ -21,12 +22,17 @@ const HomeScreen = ({navigation})=> {
     setIsRefreshing(true);
     await fetchColors()
     setTimeout(()=>{setIsRefreshing(false)},1000)
-    
   }, [])
 
   useEffect(()=> {
     fetchColors()
   },[])
+
+  useEffect(()=> {
+    if (newColorPalette) {
+      setColorPalettes(currentState => [newColorPalette, ...currentState])
+    }
+  },[newColorPalette])
 
   return ( 
     <>
@@ -34,7 +40,7 @@ const HomeScreen = ({navigation})=> {
         <Button style={{fontSize: 24}} onPress={()=> navigation.navigate('AddNewPalette')} title={'Add a color scheme'}></Button>
         <FlatList
           data={colorPalettes}
-          keyEXtractor={item=> item.paletteName}
+          keyExtractor={item=> item.paletteName}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={()=> navigation.navigate('ColorPalette', { paletteName: item.paletteName, colors:item.colors })} >
               <Text style={styles.titles}> {item.paletteName}</Text>
